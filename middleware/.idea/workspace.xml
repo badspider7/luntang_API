@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6cad60f0-752b-4c64-869c-734d70e6ac49" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../controller/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/../controller/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/auth.js" beforeDir="false" afterPath="$PROJECT_DIR$/auth.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../model/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/../model/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../routes/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/../routes/user.js" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="2KY5KBJNq9O2bKEpJRUHf0kGkSI" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6cad60f0-752b-4c64-869c-734d70e6ac49" name="Default Changelist" comment="" />
+      <created>1674138612462</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1674138612462</updated>
+      <workItem from="1674138613906" duration="8000" />
+    </task>
+    <servers />
+  </component>
+</project>

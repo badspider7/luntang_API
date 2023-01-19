@@ -18,6 +18,7 @@ module.exports = (req,res,next) => {
     try {
         const userData = jwt.verify(token, config.secret)
         req.userData = userData
+        console.log('登录通过');
         next()
     } catch (err) {
         return res.status(401).json({

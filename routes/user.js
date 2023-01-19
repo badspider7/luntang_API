@@ -18,11 +18,22 @@ router.get('/', userController.getUserList)
 
 
 //修改用户信息
-router.put('/:id',[auth,validator(userValidator)], userController.updateUser)
+router.patch('/:id',[auth,validator(userValidator)], userController.updateUser)
 
 
 //删除用户
 router.delete('/:id',[auth,validator(userValidator)],userController.deleteUser)
+
+
+//获取关注列表
+router.get("/:id/following",userController.listFollowing)
+
+//关注
+router.put("/following/:id",auth,userController.follow)
+
+
+//取消关注
+router.delete("/following/:id",auth,userController.unFollow)
 
 
 module.exports = router
