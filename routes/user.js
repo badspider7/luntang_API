@@ -3,6 +3,7 @@ const { userValidator } = require('../model/user')
 const validator = require('../middleware/validate')
 const userController = require('../controller/user')
 const auth = require('../middleware/auth')
+const checkUserExist = require('../middleware/checkUserExist')
 
 //用户注册
 router.post('/', validator(userValidator),userController.register)
@@ -29,11 +30,13 @@ router.delete('/:id',[auth,validator(userValidator)],userController.deleteUser)
 router.get("/:id/following",userController.listFollowing)
 
 //关注
-router.put("/following/:id",auth,userController.follow)
+router.put("/following/:id",[auth,checkUserExist],userController.follow)
 
 
 //取消关注
-router.delete("/following/:id",auth,userController.unFollow)
+router.delete("/following/:id",[auth,checkUserExist],userController.unFollow)
 
+//获取用户的粉丝列表
+router.get("/:id/followers",userController.listFollowers)
 
 module.exports = router

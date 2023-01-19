@@ -137,6 +137,9 @@ exports.updateUser = async (req, res, next) => {
   try {
     let userId = req.params.id;
     let body = req.body;
+    //3.1对密码进行加密
+    const salt = await bcrypt.genSalt(10);
+    body.password = await bcrypt.hash(body.password, salt);
     //查找并且修改
     const data = await User.findByIdAndUpdate(userId, body);
     //如果查找失败
@@ -182,78 +185,102 @@ exports.deleteUser = async (req, res, next) => {
   }
 };
 
-
 //获取关注列表
-exports.listFollowing =async (req,res,next) => {
-    try {
-        let userId = req.params.id
-        const user = await User.findById(userId).select("+following").populate("following") 
-        //未找到
-        if (!user) return res.status(400).json({
-            code: 400,
-            msg:"获取关注列表失败"
-        })
-        //获取成功
-        res.status(200).json({
-            code: 200,
-            msg: "获取关注列表成功",
-            data: user
-        })
-        // res.send('ok')
-    } catch (err) {
-        next(err)
-    }
-}
+exports.listFollowing = async (req, res, next) => {
+  try {
+    let userId = req.params.id;
+    const user = await User.findById(userId)
+      .select("+following")
+      .populate("following");
+    //未找到
+    if (!user)
+      return res.status(400).json({
+        code: 400,
+        msg: "获取关注列表失败",
+      });
+    //获取成功
+    res.status(200).json({
+      code: 200,
+      msg: "获取关注列表成功",
+      data: user,
+    });
+    // res.send('ok')
+  } catch (err) {
+    next(err);
+  }
+};
 
-
-//关注
+//关注  有bug，不能自己关注自己
 exports.follow = async (req, res, next) => {
-    try {
-        console.log(req.userData);
-        // 获取数据
-        let userId = req.userData._id
+  try {
+    console.log(req.userData);
+    // 获取数据
+    let userId = req.userData._id;
 
-        const user = await User.findById(userId.toString()).select("+following")
-        //如果已经关注过，就直接return
-        if (user.following.map(id => id.toString()).includes(req.params.id) )return res.status(400).json({
-            code: 400,
-            msg:"已关注过，关注失败"
-        })
-        //如果之前没有关注过，再关注
-        user.following.push(req.params.id)
-        await user.save()
-        res.status(200).json({
-            code: 200,
-            msg: '关注成功',
-            data: user
-        })
-    } catch (err) {
-        next(err)
-    }
-}
-
+    const user = await User.findById(userId.toString()).select("+following");
+    //如果已经关注过，就直接return
+    if (user.following.map((id) => id.toString()).includes(req.params.id))
+      return res.status(400).json({
+        code: 400,
+        msg: "已关注过，关注失败",
+      });
+    //如果之前没有关注过，再关注
+    user.following.push(req.params.id);
+    await user.save();
+    res.status(200).json({
+      code: 200,
+      msg: "关注成功",
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 //取消关注
 exports.unFollow = async (req, res, next) => {
-    try {
-        let userId = req.userData._id;
-        const user = await User.findById(userId.toString()).select("+following")
-        //获取所关注的用户的索引
-        const index = user.following.map(id => id.toString()).indexOf(req.params.id)
-        //如果没有关注，取消失败
-        if (index == -1) return res.status(400).json({
-            code: 400,
-            msg: "未关注，取消关注失败"
-        })
+  try {
+    let userId = req.userData._id;
+    const user = await User.findById(userId.toString()).select("+following");
+    //获取所关注的用户的索引
+    const index = user.following
+      .map((id) => id.toString())
+      .indexOf(req.params.id);
+    //如果没有关注，取消失败
+    if (index == -1)
+      return res.status(400).json({
+        code: 400,
+        msg: "未关注，取消关注失败",
+      });
 
-        //已经关注，就进行取消操作
-        user.following.splice(index, 1)
-        await user.save()
-        res.status(200).json({
-            code: 200,
-            msg:"取消关注成功"
-        })
-    } catch (err) {
-        next(err)
-    }
-}
+    //已经关注，就进行取消操作
+    user.following.splice(index, 1);
+    await user.save();
+    res.status(200).json({
+      code: 200,
+      msg: "取消关注成功",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+//获取用户的粉丝列表
+exports.listFollowers = async (req, res, next) => {
+  try {
+    const user = await User.find({ following: req.params.id });
+    if (!user)
+      return res.status(400).json({
+        code: 400,
+        msg: "查询粉丝列表失败",
+      });
+
+    res.status(200).json({
+      code: 200,
+      msg: "查询粉丝列表成功",
+      data: user,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
