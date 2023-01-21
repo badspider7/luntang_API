@@ -80,6 +80,16 @@ const userSchema = new mongoose.Schema({
     ],
     select: false,
   },
+  // 话题部分
+  followingTopic: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Topic",
+      },
+    ],
+    select: false,
+  },
 });
 
 //封装生成token功能
@@ -159,6 +169,17 @@ function userValidator(data) {
       )
       .messages({
         "array.base": "following 必须为数组类型",
+      }),
+    // 校验部分
+    followingTopic: Joi.array()
+      .items(
+        Joi.object().keys({
+          type: Joi.objectId(),
+        })
+      )
+      .messages({
+        "array.base": "followingTopic 必须为数组类型",
+        "string.pattern.name": "必须为 objectId 类型",
       }),
   });
 

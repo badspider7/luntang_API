@@ -2,6 +2,7 @@
 const { User } = require("../model/user");
 //导入加密模块
 const bcrypt = require("bcrypt");
+const { Question } = require("../model/questions");
 
 //用户注册
 exports.register = async (req, res, next) => {
@@ -284,3 +285,90 @@ exports.listFollowers = async (req, res, next) => {
     next(err);
   }
 };
+
+// 关注话题
+exports.followTopic = async (req, res, next) => {
+  try{
+    let userId = req.userData._id
+    const user = await User.findById(userId.toString()).select("+followingTopic")
+    // 如果已经关注过了就直接return
+    if(user.followingTopic.map(id => id.toString()).includes(req.params.id)) return res.status(400).json({
+      code: 400,
+      msg: "已关注,关注失败"
+    })
+    // 成功
+    user.followingTopic.push(req.params.id)
+    await user.save()
+    res.status(200).json({
+      code: 200,
+      msg: "关注成功",
+      data: user
+    })
+  }catch(err) {
+    next(err)
+  }
+}
+
+// 取消关注话题
+exports.unfollowTopic = async (req, res, next) => {
+  try{
+    let userId = req.userData._id
+    const user = await User.findById(userId.toString()).select("+followingTopic")
+    // 获取所关注的用户的索引
+    const index = user.followingTopic.map(id => id.toString()).indexOf(req.params.id)
+    // 若没有关注，就取消失败
+    if(index == -1) return res.status(400).json({
+      code: 400,
+      msg: "未关注,取消关注失败"
+    })
+    // 若已经关注，则取消
+    user.followingTopic.splice(index, 1);
+    await user.save()
+    res.status(200).json({
+      code: 200,
+      msg: "取消关注成功"
+    })
+  }catch(err) {
+    next(err)
+  }
+}
+
+// 获取某个用户关注的话题
+exports.listFollowingTopic = async (req, res, next) => {
+  try{
+    let userId = req.params.id;
+    const user = await User.findById(userId).select("+followingTopic").populate("followingTopic")
+    // 未找到
+    if(!user) return res.status(400).json({
+      code: 400,
+      msg: "查询失败"
+    })
+    // 获取成功
+    res.status(200).json({
+      code: 200,
+      msg: "查询成功",
+      data:  user 
+    })
+  } catch(err) {
+    next(err)
+  }
+};
+
+
+// 用户的问题列表
+exports.listQuestions = async (req, res, next) => {
+  try{
+    const questions = await Question.find({questioner: req.params.id})
+    if(!questions) return res.status(400).json({
+      code: 400,
+      msg: "问题列表查找失败"
+    })
+    res.status(200).json({
+      code: 200,
+      msg: "成功,666!",
+      data: questions
+    })
+  }catch(err) {
+    next(err)
+  }
+}
