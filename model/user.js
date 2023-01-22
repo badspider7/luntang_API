@@ -90,6 +90,21 @@ const userSchema = new mongoose.Schema({
     ],
     select: false,
   },
+
+  likingAnswers: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Answer"
+    }],
+    select: false
+  },
+  dislikingAnswers: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Answer"
+    }],
+    select: false
+  },
 });
 
 //封装生成token功能

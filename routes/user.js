@@ -5,6 +5,7 @@ const userController = require('../controller/user')
 const auth = require('../middleware/auth')
 const checkUserExist = require('../middleware/checkUserExist')
 const checkTopicExist = require('../middleware/checkTopicExist')
+const checkAnswerExist = require('../middleware/checkAnswerExist')
 
 //用户注册
 router.post('/', validator(userValidator),userController.register)
@@ -50,6 +51,24 @@ router.delete('/followingTopic/:id', [auth,checkTopicExist],userController.unfol
 router.get("/:id/followingTopic",userController.listFollowingTopic)
 
 //用户的问题列表
-router.get("/:id/questions",userController.listQuestions)
+router.get("/:id/questions", userController.listQuestions)
+
+// 喜欢答案
+router.put("/likingAnswers/:id", [auth, checkAnswerExist],  userController.likeAnswer, userController.undislikeAnswer)
+
+// 取消喜欢
+router.delete("/likingAnswers/:id", [auth, checkAnswerExist], userController.unlikeAnswer)
+
+// 喜欢列表
+router.get('/:id/likingAnswers', userController.listLikingAnswers);
+
+// 不喜欢答案
+router.put("/dislikingAnswers/:id", [auth, checkAnswerExist],  userController.dislikeAnswer, userController.unlikeAnswer)
+
+// 取消不喜欢
+router.delete("/dislikingAnswers/:id", [auth, checkAnswerExist], userController.undislikeAnswer)
+
+// 不喜欢列表
+router.get('/:id/dislikingAnswers', userController.listDisLikingAnswers);
 
 module.exports = router

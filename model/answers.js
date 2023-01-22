@@ -19,6 +19,11 @@ const answerSchema = new mongoose.Schema({
   },
   questionId: {
     type: String,
+  },
+  voteCount: {
+    type: Number,
+    default: 0,
+    required: true
   }
 })
 
@@ -29,7 +34,8 @@ function answerValidator(data) {
   const schema = Joi.object({
     content: Joi.string().required(),
     answer: Joi.objectId(),
-    questionId: Joi.string()
+    questionId: Joi.string(),
+    voteCount: Joi.number()
   })
   return schema.validate(data)
 }

@@ -372,3 +372,131 @@ exports.listQuestions = async (req, res, next) => {
     next(err)
   }
 }
+
+/* 
+  赞的
+*/
+// 喜欢答案
+exports.likeAnswer = async (req, res, next) => {
+  try{
+    let userId = req.userData._id
+    const user = await User.findById(userId.toString()).select("+likingAnswers")
+    if(!user.likingAnswers.map(id => id.toString()).includes(req.params.id)){
+      user.likingAnswers.push(req.params.id)
+      await user.save()
+      await Answer.findByIdAndUpdate(req.params.id, { $inc: {voteCount: 1} })
+    }
+    // res.status(200).json({
+    //   code: 200,
+    //   msg: "操作成功",
+    //   data: user
+    // })
+    await next()
+  }catch(err) {
+    next(err)
+  }
+}
+
+// 取消喜欢
+exports.unlikeAnswer = async (req, res, next) => {
+  try{
+    let userId = req.userData._id
+    const user = await User.findById(userId.toString()).select("+likingAnswers")
+    const index = user.likingAnswers.map(id => id.toString()).indexOf(req.params.id)
+    if(index > -1) {
+      user.likingAnswers.splice(index, 1);
+      await user.save()
+      await Answer.findByIdAndUpdate(req.params.id, { $inc: {voteCount: -1} })
+    }
+    res.status(200).json({
+      code: 200,
+      msg: "成功"
+    })
+  }catch(err) {
+    next(err)
+  }
+}
+
+// 喜欢的答案列表
+exports.listLikingAnswers = async (req, res, next) => {
+  try{
+    let userId = req.params.id;
+    const user = await User.findById(userId).select("+likingAnswers").populate("likingAnswers")
+    // 未找到
+    if(!user) return res.status(400).json({
+      code: 400,
+      msg: "操作失败"
+    })
+    // 获取成功
+    res.status(200).json({
+      code: 200,
+      msg: "操作成功",
+      data:  user 
+    })
+  } catch(err) {
+    next(err)
+  }
+};
+
+/* 
+  踩的
+*/
+// 不喜欢答案
+exports.dislikeAnswer = async (req, res, next) => {
+  try{
+    let userId = req.userData._id
+    const user = await User.findById(userId.toString()).select("+dislikingAnswers")
+    if(!user.dislikingAnswers.map(id => id.toString()).includes(req.params.id)){
+      user.dislikingAnswers.push(req.params.id)
+      await user.save()
+    }
+    // res.status(200).json({
+    //   code: 200,
+    //   msg: "操作成功",
+    //   data: user
+    // })
+    await next()
+  }catch(err) {
+    next(err)
+  }
+}
+
+// 取消不喜欢
+exports.undislikeAnswer = async (req, res, next) => {
+  try{
+    let userId = req.userData._id
+    const user = await User.findById(userId.toString()).select("+dislikingAnswers")
+    const index = user.dislikingAnswers.map(id => id.toString()).indexOf(req.params.id)
+    if(index > -1) {
+      user.dislikingAnswers.splice(index, 1);
+      await user.save()
+    }
+    res.status(200).json({
+      code: 200,
+      msg: "成功"
+    })
+  }catch(err) {
+    await next(err)
+  }
+}
+
+// 不喜欢的答案列表
+exports.listDisLikingAnswers = async (req, res, next) => {
+  try{
+    let userId = req.params.id;
+    const user = await User.findById(userId).select("+dislikingAnswers").populate("dislikingAnswers")
+    // 未找到
+    if(!user) return res.status(400).json({
+      code: 400,
+      msg: "操作失败"
+    })
+    // 获取成功
+    res.status(200).json({
+      code: 200,
+      msg: "操作成功",
+      data:  user 
+    })
+  } catch(err) {
+    next(err)
+  }
+};
