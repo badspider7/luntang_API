@@ -105,6 +105,14 @@ const userSchema = new mongoose.Schema({
     }],
     select: false
   },
+  //收藏答案
+  collectingAnswers: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Answer"
+    }],
+    select: false
+  },
 });
 
 //封装生成token功能

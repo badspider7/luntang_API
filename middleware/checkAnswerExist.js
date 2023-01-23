@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
     code: 404,
     msg: "答案不存在"
   })
-  if(answers.questionId !== req.params.questionId) {
+  if(req.params.questionId && answers.questionId !== req.params.questionId) {
     return res.status(404).json({
       code: 404,
       msg: "该问题下没有此答案"

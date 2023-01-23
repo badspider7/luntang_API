@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 Joi.objectId = require("joi-objectid")(Joi);
 
-const answerSchema = new mongoose.Schema({
+const commentSchema = new mongoose.Schema({
   __v: {
     type: Number,
     select: false
@@ -11,7 +11,7 @@ const answerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  answerer: {
+  commentator: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -20,27 +20,38 @@ const answerSchema = new mongoose.Schema({
   questionId: {
     type: String,
   },
-  voteCount: {
-    type: Number,
-    default: 0,
-    required: true
+  answerId: {
+    type: String
+  },
+
+  // 一级与二级评论
+  rootCommentId: {
+    type: String
+  },
+  replyTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 },{timestamps: true})
 
 // 创建 Model
-const Answer = mongoose.model("Answer", answerSchema)
+const Comment = mongoose.model("Comment", commentSchema)
 
-function answerValidator(data) {
+function commentValidator(data) {
   const schema = Joi.object({
     content: Joi.string().required(),
-    answer: Joi.objectId(),
+    commentator: Joi.objectId(),
     questionId: Joi.string(),
-    voteCount: Joi.number()
+    answerId: Joi.string(),
+
+    // 校验 
+    rootCommentId: Joi.string(),
+    replyTo: Joi.objectId()
   })
   return schema.validate(data)
 }
 
 module.exports = {
-  Answer,
-  answerValidator
+  Comment,
+  commentValidator
 }

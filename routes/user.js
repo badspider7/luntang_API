@@ -71,4 +71,13 @@ router.delete("/dislikingAnswers/:id", [auth, checkAnswerExist], userController.
 // 不喜欢列表
 router.get('/:id/dislikingAnswers', userController.listDisLikingAnswers);
 
+// 收藏
+router.put("/collectingAnswers/:id", [auth, checkAnswerExist], userController.collectingAnswer)
+
+// 取消收藏
+router.delete("/collectingAnswers/:id", [auth, checkAnswerExist], userController.uncollectingAnswer)
+
+// 收藏列表
+router.get("/:id/collectingAnswers", userController.listCollectingAnswers)
+
 module.exports = router

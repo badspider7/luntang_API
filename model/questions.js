@@ -28,7 +28,7 @@ const queationSchema = new mongoose.Schema({
     }],
     select:false
   }
-})
+},{timestamps:true})
 
 // 创建 Model
 const Question = mongoose.model("Question", queationSchema)

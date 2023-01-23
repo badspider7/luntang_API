@@ -7,12 +7,21 @@ router.use("/user", require("./user"));
 router.use("/upload", require("./upload"));
 
 //话题相关路由
-router.use("/topic", require("./topic"));
+router.use("/topics", require("./topic"));
 
 //问题接口路由
 router.use("/questions", require("./questions"));
 
-//答案接口
+//答案接口路由
 router.use("/questions/:questionId/answers", require("./answers"));
+
+//评论接口路由
+router.use("/questions/:questionId/answers/:answerId/comments", require('./comments'))
+
+//分类路由
+router.use("/categories", require('./categories'))
+
+//文章路由
+router.use("/articles",require('./articles'))
 
 module.exports = router;

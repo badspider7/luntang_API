@@ -500,3 +500,70 @@ exports.listDisLikingAnswers = async (req, res, next) => {
     next(err)
   }
 };
+
+// 收藏答案
+exports.collectingAnswer = async (req, res, next) => {
+  try{
+    let userId = req.userData._id
+    const user = await User.findById(userId.toString()).select("+collectingAnswers")
+    // 如果已经关注过了就直接return
+    if(user.collectingAnswers.map(id => id.toString()).includes(req.params.id)) return res.status(400).json({
+      code: 400,
+      msg: "已收藏,收藏失败"
+    })
+    // 成功
+    user.collectingAnswers.push(req.params.id)
+    await user.save()
+    res.status(200).json({
+      code: 200,
+      msg: "收藏成功",
+      data: user
+    })
+  }catch(err) {
+    next(err)
+  }
+}
+
+// 取消收藏
+exports.uncollectingAnswer = async (req, res, next) => {
+  try{
+    let userId = req.userData._id
+    const user = await User.findById(userId.toString()).select("+collectingAnswers")
+    const index = user.collectingAnswers.map(id => id.toString()).indexOf(req.params.id)
+    if(index == -1) return res.status(400).json({
+      code: 400,
+      msg: "未收藏,取消收藏失败"
+    })
+    // 若已经关注，则取消
+    user.collectingAnswers.splice(index, 1);
+    await user.save()
+    res.status(200).json({
+      code: 200,
+      msg: "取消收藏成功",
+      data: user
+    })
+  }catch(err) {
+    next(err)
+  }
+}
+
+// 收藏列表
+exports.listCollectingAnswers = async (req, res, next) => {
+  try{
+    let userId = req.params.id;
+    const user = await User.findById(userId).select("+collectingAnswers").populate("collectingAnswers")
+    // 未找到
+    if(!user) return res.status(400).json({
+      code: 400,
+      msg: "操作失败"
+    })
+    // 获取成功
+    res.status(200).json({
+      code: 200,
+      msg: "操作成功",
+      data:  user 
+    })
+  } catch(err) {
+    next(err)
+  }
+};
