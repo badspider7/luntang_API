@@ -80,4 +80,5 @@ router.delete("/collectingAnswers/:id", [auth, checkAnswerExist], userController
 // 收藏列表
 router.get("/:id/collectingAnswers", userController.listCollectingAnswers)
 
+
 module.exports = router

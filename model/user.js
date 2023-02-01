@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   //用户名
   username: {
     type: String,
-    required: true,
+    // required: true,
     minlength: 2,
     maxlength: 20,
   },
@@ -38,6 +38,7 @@ const userSchema = new mongoose.Schema({
   // 封面/头像
   avatar_url: {
     type: String,
+    default:'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
   },
   // 性别
   gender: {
@@ -139,8 +140,8 @@ function userValidator(data) {
       "string.min": "email 最短为6位",
       "string.max": "email 最长为20位",
     }),
-    username: Joi.string().min(2).max(20).required().messages({
-      "any.required": "缺少必选参数 username",
+    username: Joi.string().min(2).max(20).messages({
+      // "any.required": "缺少必选参数 username",
       "string.base": "username 必须是 String 类型的",
       "string.min": "username 最短为2位",
       "string.max": "username 最长为20位",

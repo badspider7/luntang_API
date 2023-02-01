@@ -4,6 +4,8 @@ const { User } = require("../model/user");
 const bcrypt = require("bcrypt");
 const { Question } = require("../model/questions");
 
+const axios = require("axios")
+
 //用户注册
 exports.register = async (req, res, next) => {
   try {
@@ -72,11 +74,14 @@ exports.login = async (req, res, next) => {
     //5.如果密码正确，登录成功,返回token
     res.status(200).json({
       id: user.id,
+      username: user.username,
+      email: user.email,
       code: 200,
       msg: "登录成功!",
       authorization: {
         token: user.generateToken(),
       },
+      avatar_url:user.avatar_url
     });
   } catch (err) {
     next(err);
@@ -567,3 +572,5 @@ exports.listCollectingAnswers = async (req, res, next) => {
     next(err)
   }
 };
+
+

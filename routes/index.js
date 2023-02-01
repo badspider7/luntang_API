@@ -22,6 +22,9 @@ router.use("/questions/:questionId/answers/:answerId/comments", require('./comme
 router.use("/categories", require('./categories'))
 
 //文章路由
-router.use("/articles",require('./articles'))
+router.use("/articles", require('./articles'))
+
+//utils 路由
+router.use(require("../utils/utils"))
 
 module.exports = router;
