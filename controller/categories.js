@@ -5,7 +5,7 @@ const { Category } = require("../model/categories");
 exports.getCategoryList = async (req, res, next) => {
   try {
     // 当前是第几页
-    const page = Math.max(req.query.page * 1, 1) - 1;
+    const page = Math.max(req.query.page?req.query.page:1 * 1, 1) - 1;
     // 每页有几条数据
     const { per_page = 10 } = req.query;
     const perPage = Math.max(per_page * 1, 1);

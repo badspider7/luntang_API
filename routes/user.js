@@ -80,5 +80,7 @@ router.delete("/collectingAnswers/:id", [auth, checkAnswerExist], userController
 // 收藏列表
 router.get("/:id/collectingAnswers", userController.listCollectingAnswers)
 
+// //获取用户头像
+// router.get('/avatar/:id')
 
 module.exports = router

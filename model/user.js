@@ -50,6 +50,7 @@ const userSchema = new mongoose.Schema({
   // 一句话介绍
   slogn: {
     type: String,
+    default:"badspider"
   },
   // 居住地
   locations: {
