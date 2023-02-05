@@ -1,6 +1,7 @@
 //导入话题模块
 const { Topic } = require("../model/topic");
 const { User } = require("../model/user");
+const {Question} = require("../model/questions")
 
 //获取话题列表
 exports.getTopicsList = async (req, res, next) => {

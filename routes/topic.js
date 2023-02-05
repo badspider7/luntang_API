@@ -10,7 +10,7 @@ const checkTopicExist = require('../middleware/checkTopicExist')
 //获取话题列表
 router.get('/',topicController.getTopicsList)
 
-//获取指定话题
+//查询指定话题
 router.get('/:id', topicController.getTopic)
 
 //新增话题
