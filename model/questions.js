@@ -11,14 +11,16 @@ const queationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  //问题的描述
   description: {
     type: String
   },
+  //提出问题的人
   questioner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
     required: true,
-    select: false
+    // select: false
   },
 
   topics: {
@@ -26,7 +28,7 @@ const queationSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref:"Topic"
     }],
-    select:false
+    // select:false
   }
 },{timestamps:true})
 

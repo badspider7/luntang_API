@@ -2,7 +2,9 @@ const router = require("express").Router()
 
 const auth = require("../middleware/auth")
 
-const { questionValidator} = require("../model/questions")
+const {
+    questionValidator
+} = require("../model/questions")
 const validator = require("../middleware/validate")
 
 const checkQuestioner = require("../middleware/checkQuestioner")

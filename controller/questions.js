@@ -10,18 +10,26 @@ exports.getQuestionsList = async (req, res, next) => {
     const page = Math.max((req.query.page?req.query.page:1) * 1 , 1) -1;
 
     const keyword = new RegExp(req.query.keyword)
-    const questionsList = await Question.find({ $or: [{title: keyword}, {description: keyword}] })
+    const questionsList = await Question.find({ $or: [{title: keyword}, {description: keyword}] }).populate("questioner topics")
       .limit(perPage)
       .skip(page * perPage);
+    
+    const totalCounts = await Question.find({ $or: [{title: keyword}, {description: keyword}] })
     if (!questionsList)
       return res.status(400).json({
         code: 400,
         msg: "获取问题列表失败",
       });
+    
     res.status(200).json({
       code: 200,
       msg: "获取问题列表成功",
-      data: questionsList,
+      data: {
+        list: questionsList,
+        totalCount: questionsList.length,
+        pageNumber: page + 1,
+        totalCounts:totalCounts.length
+      },
     });
   } catch (err) {
     next(err);
