@@ -17,15 +17,17 @@ const answerSchema = new mongoose.Schema({
     required: true,
     select: false
   },
-  questionId: {
-    type: String,
+  questionsId: {
+    type: String
   },
   voteCount: {
     type: Number,
     default: 0,
     required: true
   }
-},{timestamps: true})
+}, {
+  timestamps: true
+})
 
 // 创建 Model
 const Answer = mongoose.model("Answer", answerSchema)
@@ -34,8 +36,8 @@ function answerValidator(data) {
   const schema = Joi.object({
     content: Joi.string().required(),
     answer: Joi.objectId(),
-    questionId: Joi.string(),
-    voteCount: Joi.number()
+    questionsId: Joi.string(),
+    voteCount: Joi.number(),
   })
   return schema.validate(data)
 }

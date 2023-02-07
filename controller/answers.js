@@ -1,37 +1,61 @@
-const { Answer } = require("../model/answers");
+const {
+  Answer
+} = require("../model/answers");
+
+exports.getparams = async (req, res, next) => {
+  console.log(req);
+
+  res.send('3')
+}
 
 // 获取答案列表
 exports.getAnswersList = async (req, res, next) => {
   try {
-    const { per_page = 10 } = req.query;
-    // 每页有几项
-    const perPage = Math.max(per_page * 1, 1);
-    // 当前是第几页
-    const page = Math.max((req.query.page?req.query.page:1) * 1 , 1) -1;
 
-    const keyword = new RegExp(req.query.keyword)
-    const answersList = await Answer.find({content: keyword, questionId: req.params.questionId})
-      .limit(perPage)
-      .skip(page * perPage);
-    if (!answersList)
-      return res.status(400).json({
-        code: 400,
-        msg: "获取答案列表失败",
-      });
-    res.status(200).json({
-      code: 200,
-      msg: "获取答案列表成功",
-      data: answersList,
-    });
+    console.log(req.params);
+  res.send('1')
+
+  //   const {
+  //     per_page = 10
+  //   } = req.query;
+  //   // 每页有几项
+  //   const perPage = Math.max(per_page * 1, 1);
+  //   // 当前是第几页
+  //   const page = Math.max((req.query.page ? req.query.page : 1) * 1, 1) - 1;
+
+  //   const keyword = new RegExp(req.query.keyword)
+  //   const answersList = await Answer.find({
+  //       content: keyword,
+  //       questionsId: req.params.questionId
+  //     })
+  //     .populate("answerer")
+  //     .limit(perPage)
+  //     .skip(page * perPage);
+    
+
+
+  //   if (!answersList)
+  //     return res.status(400).json({
+  //       code: 400,
+  //       msg: "获取答案列表失败",
+  //     });
+  //   res.status(200).json({
+
+  //     code: 200,
+  //     msg: "获取答案列表成功",
+  //     data: answersList,
+  //   });
   } catch (err) {
     next(err);
   }
-};
+  };
 
 // 获取指定答案
 exports.getAnswer = async (req, res, next) => {
   try {
-    const { fields = "" } = req.query;
+    const {
+      fields = ""
+    } = req.query;
     const selectFields = fields
       .split(";")
       .filter((f) => f)
@@ -58,7 +82,11 @@ exports.getAnswer = async (req, res, next) => {
 // 创建答案
 exports.createAnswer = async (req, res, next) => {
   try {
-    const answer = new Answer({...req.body, answerer: req.userData._id, questionId: req.params.questionId});
+    const answer = new Answer({
+      ...req.body,
+      answerer: req.userData._id,
+      questionsId: req.params.questionsId
+    });
     await answer.save();
 
     res.status(200).json({
@@ -93,9 +121,9 @@ exports.updateAnswer = async (req, res, next) => {
 
 // 删除答案
 exports.deleteAnswer = async (req, res, next) => {
-  try{
+  try {
     const data = await Answer.findByIdAndDelete(req.params.id)
-    if(!data) return res.status(400).json({
+    if (!data) return res.status(400).json({
       code: 400,
       msg: "删除答案失败"
     })
@@ -104,7 +132,7 @@ exports.deleteAnswer = async (req, res, next) => {
       msg: "删除答案成功",
       data: data
     })
-  }catch(err){
+  } catch (err) {
     next(err)
-  } 
+  }
 }

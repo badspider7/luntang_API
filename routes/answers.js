@@ -7,7 +7,7 @@ const checkAnswerExist = require("../middleware/checkAnswerExist")
 const answer = require("../controller/answers")
 
 // 获取答案列表
-router.get("/", answer.getAnswersList)
+router.get("/", answer.getparams)
 
 // 获取指定答案
 router.get("/:id", checkAnswerExist, answer.getAnswer)

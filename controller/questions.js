@@ -12,7 +12,7 @@ exports.getQuestionsList = async (req, res, next) => {
     const keyword = new RegExp(req.query.keyword)
     const questionsList = await Question.find({ $or: [{title: keyword}, {description: keyword}] }).populate("questioner topics")
       .limit(perPage)
-      .skip(page * perPage);
+      .skip(page * perPage).sort({ createdAt: -1 });
     
     const totalCounts = await Question.find({ $or: [{title: keyword}, {description: keyword}] })
     if (!questionsList)
@@ -45,6 +45,7 @@ exports.getQuestion = async (req, res, next) => {
       .filter((f) => f)
       .map((f) => " +" + f)
       .join("");
+    console.log(req.params);
     const question = await Question.findById(req.params.id).select(selectFields).populate("questioner topics");
 
     if (!question)

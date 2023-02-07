@@ -13,7 +13,7 @@ router.use("/topics", require("./topic"));
 router.use("/questions", require("./questions"));
 
 //答案接口路由
-router.use("/questions/:questionId/answers", require("./answers"));
+router.use("/questions/:questionId/answers", require("./answers"))
 
 //评论接口路由
 router.use("/questions/:questionId/answers/:answerId/comments", require('./comments'))
