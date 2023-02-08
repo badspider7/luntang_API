@@ -2,53 +2,44 @@ const {
   Answer
 } = require("../model/answers");
 
-exports.getparams = async (req, res, next) => {
-  console.log(req);
 
-  res.send('3')
-}
-
-// 获取答案列表
+// 获取答案列表  bug 拿不到req.params
 exports.getAnswersList = async (req, res, next) => {
   try {
+    const {
+      per_page = 10
+    } = req.query;
+    // 每页有几项
+    const perPage = Math.max(per_page * 1, 1);
+    // 当前是第几页
+    const page = Math.max((req.query.page ? req.query.page : 1) * 1, 1) - 1;
 
-    console.log(req.params);
-  res.send('1')
-
-  //   const {
-  //     per_page = 10
-  //   } = req.query;
-  //   // 每页有几项
-  //   const perPage = Math.max(per_page * 1, 1);
-  //   // 当前是第几页
-  //   const page = Math.max((req.query.page ? req.query.page : 1) * 1, 1) - 1;
-
-  //   const keyword = new RegExp(req.query.keyword)
-  //   const answersList = await Answer.find({
-  //       content: keyword,
-  //       questionsId: req.params.questionId
-  //     })
-  //     .populate("answerer")
-  //     .limit(perPage)
-  //     .skip(page * perPage);
+    const keyword = new RegExp(req.query.keyword)
+    const answersList = await Answer.find({
+        content: keyword,
+        questionsId: req.params.questionId
+      })
+      .populate("answerer")
+      .limit(perPage)
+      .skip(page * perPage);
     
 
 
-  //   if (!answersList)
-  //     return res.status(400).json({
-  //       code: 400,
-  //       msg: "获取答案列表失败",
-  //     });
-  //   res.status(200).json({
+    if (!answersList)
+      return res.status(400).json({
+        code: 400,
+        msg: "获取答案列表失败",
+      });
+    res.status(200).json({
 
-  //     code: 200,
-  //     msg: "获取答案列表成功",
-  //     data: answersList,
-  //   });
+      code: 200,
+      msg: "获取答案列表成功",
+      data: answersList,
+    });
   } catch (err) {
     next(err);
   }
-  };
+};
 
 // 获取指定答案
 exports.getAnswer = async (req, res, next) => {
