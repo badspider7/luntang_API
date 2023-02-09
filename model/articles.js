@@ -18,7 +18,6 @@ const articleSchema = new mongoose.Schema({
   content: {
     type: String,
     required: true,
-    maxlength: 200,
     minlength: 2
   },
   status: {
@@ -42,9 +41,11 @@ const articleSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-}, { timestamps: true })
+}, {
+  timestamps: true
+})
 
-const Article =  mongoose.model("Article", articleSchema)
+const Article = mongoose.model("Article", articleSchema)
 
 // 创建校验函数
 function articleValidator(data) {
@@ -53,12 +54,12 @@ function articleValidator(data) {
       "string.base": "title 必须为String",
       "string.min": "title 最少为2个字符",
       "string.max": "title 最多为50个字符",
-      "any.required": "缺少必选参数 title" 
+      "any.required": "缺少必选参数 title"
     }),
-    content: Joi.string().min(2).max(200).required().messages({
+    content: Joi.string().min(10).required().messages({
       "string.base": "content 必须为String",
-      "string.min": "content 最少为2个字符",
-      "string.max": "content 最多为200个字符",
+      "string.min": "content 最少为10个字符",
+      // "string.max": "content 最多为200个字符",
       "any.required": "缺少必选参数 content"
     }),
     status: Joi.string().valid("published", "drafted", "trashed").required().messages({
@@ -70,7 +71,7 @@ function articleValidator(data) {
       "string.pattern.name": "category 格式有误, 应为 ObjectId 格式",
       "any.required": "category 必须设置"
     })
-  }) 
+  })
   return schema.validate(data)
 }
 

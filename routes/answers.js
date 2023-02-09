@@ -7,19 +7,19 @@ const checkAnswerExist = require("../middleware/checkAnswerExist")
 const answer = require("../controller/answers")
 
 // 获取答案列表
-// router.get("/", answer.getAnswersList)
+// router.get("/:questionId/answers/", answer.getAnswersList)
 
 // 获取指定答案
-router.get("/:id", checkAnswerExist, answer.getAnswer)
+router.get("/:questionId/answers/:id", checkAnswerExist, answer.getAnswer)
 
 // 新增答案
-router.post("/", [auth, validator(answerValidator)], answer.createAnswer)
+router.post("/:questionId/answers", [auth, validator(answerValidator)], answer.createAnswer)
 
 // 修改答案
-router.patch("/:id", [auth, validator(answerValidator), checkAnswerExist, checkAnswerer] ,answer.updateAnswer)
+router.patch("/:questionId/answers/:id", [auth, validator(answerValidator), checkAnswerExist, checkAnswerer] ,answer.updateAnswer)
 
 // 删除答案
-router.delete("/:id", [auth, checkAnswerExist, checkAnswerer], answer.deleteAnswer)
+router.delete("/:questionId/answers/:id", [auth, checkAnswerExist, checkAnswerer], answer.deleteAnswer)
 
 
 module.exports = router

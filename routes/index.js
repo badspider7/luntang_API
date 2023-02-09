@@ -16,10 +16,11 @@ router.use("/topics", require("./topic"));
 router.use("/questions", require("./questions"));
 
 //答案接口路由
-router.use("/questions/:questionId/answers", require("./answers"));
+router.use("/questions", require("./answers"));
 
 //评论接口路由
-router.use("/questions/:questionId/answers/:answerId/comments", require('./comments'))
+router.use("/questions", require('./comments'))
+// router.use("/article", require('./comments'))
 
 //分类路由
 router.use("/categories", require('./categories'))

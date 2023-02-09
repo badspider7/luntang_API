@@ -3,7 +3,7 @@ const {
 } = require("../model/answers");
 
 
-// 获取答案列表  bug 拿不到req.params
+// 获取答案列表  bug 拿不到req.params  单独写出去了
 exports.getAnswersList = async (req, res, next) => {
   try {
     const {
@@ -73,10 +73,11 @@ exports.getAnswer = async (req, res, next) => {
 // 创建答案
 exports.createAnswer = async (req, res, next) => {
   try {
+    console.log('创建答案,req.params:',req.params);
     const answer = new Answer({
       ...req.body,
       answerer: req.userData._id,
-      questionsId: req.params.questionsId
+      questionsId: req.params.questionId
     });
     await answer.save();
 
