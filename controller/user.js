@@ -216,7 +216,7 @@ exports.listFollowing = async (req, res, next) => {
   }
 };
 
-//关注  有bug，不能自己关注自己
+//关注  有bug，不能自己关注自己,其实好像也可以
 exports.follow = async (req, res, next) => {
   try {
     console.log(req.userData);

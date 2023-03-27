@@ -1,12 +1,29 @@
-const express = require('express')
-const app = express()
-const port = 3000
+/*这个字符串中的每个字每出现了多少次*/
+function stringCount(str) {
+  if (!str) {
+    return;
+  }
+  let obj = {};
+  LowStr = str.toLocaleLowerCase(); //将字符串转为小写
+  for (let i = 0; i < LowStr.length; i++) {
+    let key = LowStr[i];
+    //如果存在
+    if (obj[key]) {
+      obj[key]++;
+    }
+    //如果不存在
+    else {
+      obj[key] = 1;
+    }
+  }
 
-app.get('/:id/l', (req, res) => {
-    console.log(req.params);
-  res.send('qq')
-})
+  for (j in obj) {
+    console.log(`${j}出现了${obj[j]}次`);
+  }
+}
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
+stringCount('aabb')  
+/**
+ * a出现了2次
+*  b出现了2次
+ */

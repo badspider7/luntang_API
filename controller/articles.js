@@ -2,14 +2,15 @@
 const {
   Article
 } = require("../model/articles")
+let trim = require('trim-html')
 
 
 // 获取文章列表
 exports.getArticlesList = async (req, res, next) => {
   try {
-    //默认每页是10篇
+    //默认每页是7篇
     const {
-      per_page=10 
+      per_page=7 
     } = req.query;
     // 每页有几项
     const perPage = Math.max(per_page * 1, 1);
@@ -23,10 +24,10 @@ exports.getArticlesList = async (req, res, next) => {
     let data;
     if (status || category) {
       data = await Article.find(req.query).populate("author category").limit(perPage)
-        .skip(page * perPage);
+        .skip(page * perPage).sort({updatedAt:-1});
     } else {
       data = await Article.find().populate("author category").limit(perPage)
-        .skip(page * perPage);
+        .skip(page * perPage).sort({createdAt:-1});
     }
     const totalCounts =  await (await Article.find().populate("author category")).length
 
@@ -51,6 +52,8 @@ exports.getArticle = async (req, res, next) => {
     // 1.根据id获取数据
     const id = req.params.id
     const data = await Article.findById(id).populate("category author")
+    data.view++;
+    data.save();
     // 2.检测是否存在数据
     if (!data) {
       return res.status(400).json({
@@ -80,6 +83,8 @@ exports.createArticle = async (req, res, next) => {
     let data = new Article(Object.assign(req.body, {
       author: req.userData._id
     }))
+    let trimmed = trim(req.body.content,{preserveTags:true,limit:200,more:true})
+    data.excerpt = trimmed.html;
     await data.save()
     // 2.响应
     res.status(200).json({

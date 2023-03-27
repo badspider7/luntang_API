@@ -26,11 +26,18 @@ const queationSchema = new mongoose.Schema({
   topics: {
     type: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref:"Topic"
+      ref: "Topic"
     }],
     // select:false
+    default: '63ca2a077e369cfc559fadf0'
+  },
+  view: {
+    type: Number,
+    default: 0
   }
-},{timestamps:true})
+}, {
+  timestamps: true
+})
 
 // 创建 Model
 const Question = mongoose.model("Question", queationSchema)

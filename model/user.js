@@ -35,10 +35,15 @@ const userSchema = new mongoose.Schema({
   },
 
   //个人资料
-  // 封面/头像
+  // 头像
   avatar_url: {
     type: String,
     default:'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
+  },
+  //头图
+  banner: {
+    type: String,
+    default:"../public/banner/top8.jpg"
   },
   // 性别
   gender: {

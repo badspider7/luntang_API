@@ -1,26 +1,44 @@
-const { Question } = require("../model/questions");
+const {
+  Question
+} = require("../model/questions");
 
 // 获取问题列表
 exports.getQuestionsList = async (req, res, next) => {
   try {
-    const { per_page = 10 } = req.query;
+    const {
+      per_page = 10
+    } = req.query;
     // 每页有几项
     const perPage = Math.max(per_page * 1, 1);
     // 当前是第几页
-    const page = Math.max((req.query.page?req.query.page:1) * 1 , 1) -1;
+    const page = Math.max((req.query.page ? req.query.page : 1) * 1, 1) - 1;
 
     const keyword = new RegExp(req.query.keyword)
-    const questionsList = await Question.find({ $or: [{title: keyword}, {description: keyword}] }).populate("questioner topics")
+    const questionsList = await Question.find({
+        $or: [{
+          title: keyword
+        }, {
+          description: keyword
+        }]
+      }).populate("questioner topics")
       .limit(perPage)
-      .skip(page * perPage).sort({ createdAt: -1 });
-    
-    const totalCounts = await Question.find({ $or: [{title: keyword}, {description: keyword}] })
+      .skip(page * perPage).sort({
+        createdAt: -1
+      });
+
+    const totalCounts = await Question.find({
+      $or: [{
+        title: keyword
+      }, {
+        description: keyword
+      }]
+    })
     if (!questionsList)
       return res.status(400).json({
         code: 400,
         msg: "获取问题列表失败",
       });
-    
+
     res.status(200).json({
       code: 200,
       msg: "获取问题列表成功",
@@ -28,7 +46,7 @@ exports.getQuestionsList = async (req, res, next) => {
         list: questionsList,
         totalCount: questionsList.length,
         pageNumber: page + 1,
-        totalCounts:totalCounts.length
+        totalCounts: totalCounts.length
       },
     });
   } catch (err) {
@@ -39,7 +57,9 @@ exports.getQuestionsList = async (req, res, next) => {
 // 获取指定问题
 exports.getQuestion = async (req, res, next) => {
   try {
-    const { fields = "" } = req.query;
+    const {
+      fields = ""
+    } = req.query;
     const selectFields = fields
       .split(";")
       .filter((f) => f)
@@ -53,7 +73,8 @@ exports.getQuestion = async (req, res, next) => {
         code: 400,
         msg: "获取问题失败",
       });
-
+    question.view++;
+    question.save();
     res.status(200).json({
       code: 200,
       msg: "获取问题成功",
@@ -67,7 +88,10 @@ exports.getQuestion = async (req, res, next) => {
 // 创建问题
 exports.createQuestion = async (req, res, next) => {
   try {
-    const question = new Question({...req.body, questioner: req.userData._id});
+    const question = new Question({
+      ...req.body,
+      questioner: req.userData._id
+    });
     await question.save();
 
     res.status(200).json({
@@ -102,9 +126,9 @@ exports.updateQuestion = async (req, res, next) => {
 
 // 删除问题
 exports.deleteQuestion = async (req, res, next) => {
-  try{
+  try {
     const data = await Question.findByIdAndDelete(req.params.id)
-    if(!data) return res.status(400).json({
+    if (!data) return res.status(400).json({
       code: 400,
       msg: "删除问题失败"
     })
@@ -113,7 +137,7 @@ exports.deleteQuestion = async (req, res, next) => {
       msg: "删除问题成功",
       data: data
     })
-  }catch(err){
+  } catch (err) {
     next(err)
-  } 
+  }
 }

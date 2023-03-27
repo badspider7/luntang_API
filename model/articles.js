@@ -36,6 +36,17 @@ const articleSchema = new mongoose.Schema({
     ref: "Category",
     required: true
   },
+  cover: {
+    type: String,
+    default: 'https://badspider.top/img/%E5%B0%8F%E9%9B%AA.png'
+  },
+  excerpt: {
+    type: String,
+  },
+  view: {
+    type: Number,
+    default: 0
+  },
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

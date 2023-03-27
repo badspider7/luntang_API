@@ -9,10 +9,10 @@ const articles = require("../controller/articles")
 
 const auth = require("../middleware/auth")
 //检测用户是否存在
-const checkUserExist = require('../middleware/checkUserExist')
+// const checkUserExist = require('../middleware/checkUserExist')
 
 // 获取文章
-router.get("/", checkUserExist, articles.getArticlesList)
+router.get("/", articles.getArticlesList)
 
 // 获取指定文章
 router.get("/:id", articles.getArticle)
