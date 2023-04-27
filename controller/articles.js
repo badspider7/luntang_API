@@ -4,6 +4,8 @@ const {
 } = require("../model/articles")
 let trim = require('trim-html')
 
+const moment = require('moment-timezone');
+
 
 // 获取文章列表
 exports.getArticlesList = async (req, res, next) => {
@@ -29,8 +31,8 @@ exports.getArticlesList = async (req, res, next) => {
       data = await Article.find().populate("author category").limit(perPage)
         .skip(page * perPage).sort({createdAt:-1});
     }
-    const totalCounts =  await (await Article.find().populate("author category")).length
-
+    const totalCounts = await (await Article.find().populate("author category")).length
+    
     res.status(200).json({
       code: 200,
       msg: "获取所有文章成功",
@@ -79,12 +81,17 @@ exports.getArticle = async (req, res, next) => {
 // 添加新的文章
 exports.createArticle = async (req, res, next) => {
   try {
+    let time = new Date()
+    console.log( moment.utc(time).tz('Asia/Shanghai'));
+    req.body.createdAt = moment.utc(time).tz('Asia/Shanghai')
     // 1.创建并存储数据
     let data = new Article(Object.assign(req.body, {
       author: req.userData._id
     }))
     let trimmed = trim(req.body.content,{preserveTags:true,limit:200,more:true})
     data.excerpt = trimmed.html;
+
+    console.log(data);
     await data.save()
     // 2.响应
     res.status(200).json({

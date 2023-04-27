@@ -7,6 +7,8 @@ const validator = require("../middleware/validate")
 
 const articles = require("../controller/articles")
 
+const search = require('../controller/search')
+
 const auth = require("../middleware/auth")
 //检测用户是否存在
 // const checkUserExist = require('../middleware/checkUserExist')
@@ -25,5 +27,8 @@ router.patch("/:id", [auth, validator(articleValidator)], articles.updateArticle
 
 // 删除文章
 router.delete("/:id", auth, articles.deleteArticle)
+
+//搜索路由
+router.get("/search/:keyword",search.getContent)
 
 module.exports = router

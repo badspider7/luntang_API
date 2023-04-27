@@ -3,6 +3,9 @@ const Joi = require("joi")
 // 引入 joi-objectid 并设置为 Joi的属性
 Joi.objectId = require("joi-objectid")(Joi)
 
+
+
+
 // 定义 article 结构
 const articleSchema = new mongoose.Schema({
   __v: {
@@ -24,13 +27,13 @@ const articleSchema = new mongoose.Schema({
     type: String
   },
   createdAt: {
-    type: Date,
-    default: Date.now
+    type: String,
+    // default: new Date(),
   },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  },
+  // updatedAt: {
+  //   type: Date,
+  //   // default: new Date(),
+  // },
   category: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
@@ -38,7 +41,8 @@ const articleSchema = new mongoose.Schema({
   },
   cover: {
     type: String,
-    default: 'https://badspider.top/img/%E5%B0%8F%E9%9B%AA.png'
+    default: 'https://badspider.top/img/%E5%B0%8F%E9%9B%AA.png',
+    required: true
   },
   excerpt: {
     type: String,
@@ -52,8 +56,6 @@ const articleSchema = new mongoose.Schema({
     ref: "User",
     required: true
   },
-}, {
-  timestamps: true
 })
 
 const Article = mongoose.model("Article", articleSchema)
@@ -81,7 +83,11 @@ function articleValidator(data) {
     category: Joi.objectId().required().messages({
       "string.pattern.name": "category 格式有误, 应为 ObjectId 格式",
       "any.required": "category 必须设置"
-    })
+    }),
+    cover: Joi.string().required().messages({
+      "string.base": "status 必须为字符串",
+      "any.required": "cover 必须设置",
+    }),
   })
   return schema.validate(data)
 }
