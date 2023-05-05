@@ -7,7 +7,7 @@ exports.getCategoryList = async (req, res, next) => {
     // 当前是第几页
     const page = Math.max(req.query.page?req.query.page:1 * 1, 1) - 1;
     // 每页有几条数据
-    const { per_page = 10 } = req.query;
+    const { per_page = 100 } = req.query;
     const perPage = Math.max(per_page * 1, 1);
     const keyword = new RegExp(req.query.keyword);
 

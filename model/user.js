@@ -65,7 +65,7 @@ const userSchema = new mongoose.Schema({
   // 行业
   business: {
     type: String,
-    select: false,
+    // select: false,
   },
   // 职业经历
   employments: {
@@ -75,7 +75,7 @@ const userSchema = new mongoose.Schema({
         job: { type: String },
       },
     ],
-    select: false,
+    // select: false,
   },
   // 关注与粉丝部分
   following: {
@@ -85,7 +85,7 @@ const userSchema = new mongoose.Schema({
         ref: "User",
       },
     ],
-    select: false,
+    // select: false,
   },
   // 话题部分
   followingTopic: {
@@ -95,7 +95,7 @@ const userSchema = new mongoose.Schema({
         ref: "Topic",
       },
     ],
-    select: false,
+    // select: false,
   },
 
   likingAnswers: {
