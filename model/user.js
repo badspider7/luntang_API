@@ -59,13 +59,16 @@ const userSchema = new mongoose.Schema({
   },
   // 居住地
   locations: {
-    type: [{ type: String }],
-    select: false,
+    // type: [{ type: String }],
+    type:String,
+    // select: false,
+    default:'北京市朝阳区'
   },
   // 行业
   business: {
     type: String,
     // select: false,
+    default: '码农'
   },
   // 职业经历
   employments: {
@@ -172,8 +175,9 @@ function userValidator(data) {
       "string.base": "slogn 必须为String类型",
       "string.max": "slogn 最多为100个字符",
     }),
-    locations: Joi.array().items(Joi.string()).messages({
-      "array.base": "locations 必须为数组",
+    // locations: Joi.array().items(Joi.string()).messages({
+    locations: Joi.string().messages({
+      // "array.base": "locations 必须为数组",
       "string.base": "数组中必须为string类型",
     }),
     business: Joi.string().messages({

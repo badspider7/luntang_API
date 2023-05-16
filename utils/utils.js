@@ -26,7 +26,8 @@ router.get('/news', async (req, res, next) => {
         console.log(1);
         const result = await axios({
             method: "get",
-            url: "https://way.jd.com/jisuapi/get?channel=头条&num=10&start=0&appkey=da39dce4f8aa52155677ed8cd23a6470",
+            // url: "https://way.jd.com/jisuapi/get?channel=头条&num=10&start=0&appkey=da39dce4f8aa52155677ed8cd23a6470",
+            url:'https://v2.alapi.cn/api/new/toutiao?start=1&token=LwExDtUWhF3rH5ib'
         })
         res.status(200).json({
             code: 200,
